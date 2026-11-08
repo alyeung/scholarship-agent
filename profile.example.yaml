@@ -1,31 +1,30 @@
 # ============================================================================
-# Graduate School Scholarship Finder - Student Profile & Filter Configuration
+# Graduate School Scholarship Finder - Customizable Student Profile Template
 # ============================================================================
-# Copy this file to `profile.yaml` (`cp profile.example.yaml profile.yaml`)
-# and customize your personal academic, geographic, demographic, and filter
-# preferences. `profile.yaml` is git-ignored so your personal details remain
-# private locally.
+# Run `python cli.py init` (or `cp profile.example.yaml profile.yaml`) to
+# create your local, git-ignored `profile.yaml`.
+# Your local `profile.yaml` is never tracked by Git.
 
 student:
-  name: "Alex Rivera"
-  citizenship_status: "US Citizen" # "US Citizen", "Permanent Resident", "International", "DACA", "Dual Citizen"
+  name: "Sample Applicant"
+  citizenship_status: "US Citizen" # Options: "US Citizen", "Permanent Resident", "International", "DACA", "Dual Citizen"
   citizenship_countries:
     - "United States"
   first_generation_college: false
   veteran_or_military_affiliated: false
   disability_status: false
-  underrepresented_backgrounds: [] # e.g., ["Women in STEM", "First-Gen", "Veterans", "LGBTQ+", "Hispanic/Latino", "Black/African American", "Indigenous"]
+  underrepresented_backgrounds: [] # Examples: ["Women in STEM", "First-Gen", "Veterans", "LGBTQ+"]
   languages:
     - "English"
 
 geographies:
-  # Where you currently live / hold residency (used for state, regional, & local foundation awards)
+  # Current residency (matches state, regional, and local foundation awards)
   current_country: "United States"
-  current_state_or_province: "Washington"
+  current_state_or_province: "Washington" # Change to any state/province (e.g. "California", "New York", "Texas", "Ontario")
   current_city_or_metro: "Seattle"
   current_region: "Pacific Northwest"
 
-  # Where you plan to attend graduate school
+  # Target graduate school countries and states
   study_destination_countries:
     - "United States"
     - "United Kingdom"
@@ -45,13 +44,13 @@ geographies:
   excluded_countries: []
 
 academics:
-  target_degree: "Master's" # e.g., "Master's", "PhD", "MBA", "JD", "MD", "MPH"
+  target_degree: "Master's" # Options: "Master's", "PhD", "MBA", "JD", "MD", "MPH", "MPP"
   also_consider_degrees:
     - "Master's"
     - "PhD"
   field_of_study: "Computer Science & Artificial Intelligence"
-  discipline_category: "STEM" # "STEM", "Business", "Healthcare", "Humanities", "Social Sciences", "Law", "Policy", "Arts"
-  current_academic_level: "Incoming Graduate Student (Fall 2027)" # e.g., "Senior Undergrad", "Incoming Graduate Student", "1st Year Grad", "2nd Year Grad"
+  discipline_category: "STEM" # Options: "STEM", "Business", "Healthcare", "Humanities", "Social Sciences", "Law", "Policy", "Arts"
+  current_academic_level: "Incoming Graduate Student"
   gpa: 3.85
   gpa_scale: 4.0
   undergrad_major: "Computer Science"
@@ -65,7 +64,7 @@ academics:
     gre_verbal: 162
 
 filters:
-  # Hard & soft filters applied automatically during discovery and eligibility matching
+  # Hard and soft filters applied during discovery and eligibility scoring
   min_award_amount_usd: 2500
   allowed_degree_levels:
     - "Master's"
@@ -78,21 +77,21 @@ filters:
     - "Tuition Waiver"
     - "Stipend"
 
-  # Strict exclusion toggles
+  # Exclusion toggles
   exclude_repayable_loans: true
-  exclude_service_or_employment_bonds: false # Set true to exclude awards requiring post-grad employment (e.g., DoD SMART)
-  exclude_institution_locked_unless_target: true # Exclude university-specific awards unless in `target_universities`
+  exclude_service_or_employment_bonds: false # Set true to exclude awards with post-grad service obligations
+  exclude_institution_locked_unless_target: true # Exclude school-specific awards unless listed in `target_universities`
   require_no_application_fee: true
-  only_show_eligible_or_likely: false # Set true to hide "Ineligible" awards from the dashboard export
-  min_fit_score_threshold: 40 # Minimum 0-100 fit score to keep in recommended results
+  only_show_eligible_or_likely: false
+  min_fit_score_threshold: 40
 
-  # Deadline window filter (YYYY-MM-DD)
+  # Deadline window (YYYY-MM-DD)
   deadline_after: "2026-11-01"
   deadline_before: "2027-12-31"
   max_recommendation_letters: 4
 
-  # Keyword targeting & negative filters
-  must_match_any_keywords: [] # If non-empty, scholarship must match at least one of these terms
+  # Keyword targeting and negative filters
+  must_match_any_keywords: []
   boost_keywords:
     - "artificial intelligence"
     - "machine learning"

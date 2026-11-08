@@ -33,7 +33,7 @@ The system combines an application harness (`google-adk`) with a repository safe
 
 This repository is engineered for safe, unattended execution. Personal data never leaves the local machine.
 
-- **Zero Personal Data in Git**: Personal profiles (`profile.yaml`), generated dashboards (`data/`), and essay drafts are strictly git-ignored. Only generic templates (`profile.example.yaml`) are committed.
+- **Zero Personal Data in Git**: Personal profiles (`profile.yaml`), generated dashboards (`data/`), and essay drafts are strictly git-ignored. Only anonymized templates (`profile.example.yaml`) are committed.
 - **Prompt Injection Defense**: External web pages pass through a sanitizer before reaching the model. Malicious instructions and scripts are stripped automatically.
 - **Pre-Execution Safety Gate**: A deterministic hook (`.agents/scripts/pre_tool_guard.py`) blocks destructive shell commands and prevents network exfiltration of local files.
 - **Automated Security Tests**: The test suite scans tracked files on every run to ensure zero leaked credentials, tokens, or local file paths.
@@ -42,7 +42,7 @@ This repository is engineered for safe, unattended execution. Personal data neve
 
 ## Personalization and Filtering
 
-Users configure their criteria once in `profile.yaml`.
+Any applicant can customize the agent via `profile.yaml` or CLI flags.
 
 1. **Geographies**: Current state, metro area, regional residency, and target study countries (such as the United States, United Kingdom, or Canada).
 2. **Hard Filters**: Minimum award amount, degree level, maximum recommendation letters, institution locks, and service-bond exclusions.
@@ -52,14 +52,19 @@ Users configure their criteria once in `profile.yaml`.
 
 ## Quick Start
 
-### 1. Set Up Your Profile
+### 1. Initialize and Customize Your Profile
 
 ```bash
-cp profile.example.yaml profile.yaml
-cp .env.example .env
+.venv/bin/python cli.py init \
+  --name "Your Name" \
+  --degree "Master's" \
+  --field "Computer Science" \
+  --state "California" \
+  --gpa 3.85 \
+  --min-award 5000
 ```
 
-Edit `profile.yaml` with your degree, target universities, and geography preferences.
+You can also edit `profile.yaml` directly to customize target universities, research interests, and filter rules.
 
 ### 2. Run the Matching Engine
 
@@ -81,6 +86,7 @@ This command scores all fellowships and generates three local files:
 ### 4. Launch the Interactive Web UI
 
 ```bash
+cp .env.example .env
 .venv/bin/adk web
 ```
 

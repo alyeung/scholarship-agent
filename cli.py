@@ -6,12 +6,15 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+from pathlib import Path
+import shutil
 import sys
 from typing import Any
 
 from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
+import yaml
 
 from scholarship_agent.tools.eligibility_tools import (
     batch_score_scholarships,
@@ -21,7 +24,10 @@ from scholarship_agent.tools.essay_tools import (
     get_essay_prompt_context,
     save_essay_draft,
 )
-from scholarship_agent.tools.profile_tools import get_student_profile
+from scholarship_agent.tools.profile_tools import (
+    get_student_profile,
+    update_profile_setting,
+)
 from scholarship_agent.tools.search_tools import (
     scrape_scholarship_page,
     search_scholarships_web,
@@ -29,6 +35,50 @@ from scholarship_agent.tools.search_tools import (
 from scholarship_agent.tools.tracker_tools import sync_and_export_tracker
 
 console = Console()
+
+
+def cmd_init(args: argparse.Namespace) -> None:
+    """Create or customize a local, git-ignored profile.yaml from profile.example.yaml."""
+    repo_root = Path(__file__).resolve().parent
+    example_path = repo_root / "profile.example.yaml"
+    target_path = Path(args.profile).expanduser().resolve() if args.profile else (repo_root / "profile.yaml")
+
+    if not target_path.exists() or args.force:
+        shutil.copyfile(example_path, target_path)
+
+    with target_path.open("r", encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+
+    if args.name:
+        data.setdefault("student", {})["name"] = args.name
+    if args.citizenship:
+        data.setdefault("student", {})["citizenship_status"] = args.citizenship
+    if args.state:
+        data.setdefault("geographies", {})["current_state_or_province"] = args.state
+    if args.country:
+        data.setdefault("geographies", {})["current_country"] = args.country
+    if args.degree:
+        data.setdefault("academics", {})["target_degree"] = args.degree
+    if args.field:
+        data.setdefault("academics", {})["field_of_study"] = args.field
+    if args.gpa is not None:
+        data.setdefault("academics", {})["gpa"] = float(args.gpa)
+    if args.min_award is not None:
+        data.setdefault("filters", {})["min_award_amount_usd"] = int(args.min_award)
+
+    with target_path.open("w", encoding="utf-8") as f:
+        yaml.safe_dump(data, f, sort_keys=False, allow_unicode=True)
+
+    console.print(
+        Panel.fit(
+            f"Initialized local profile at [bold green]{target_path}[/bold green] (git-ignored).\n"
+            f"• Name: {data.get('student', {}).get('name')}\n"
+            f"• Degree & Field: {data.get('academics', {}).get('target_degree')} in {data.get('academics', {}).get('field_of_study')}\n"
+            f"• Geography: {data.get('geographies', {}).get('current_state_or_province')}, {data.get('geographies', {}).get('current_country')}\n"
+            f"• Min Award Filter: ${data.get('filters', {}).get('min_award_amount_usd', 0):,}",
+            title="Profile Initialized",
+        )
+    )
 
 
 def cmd_match(args: argparse.Namespace) -> None:
@@ -237,6 +287,20 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
+    p_init = sub.add_parser(
+        "init",
+        help="Initialize or customize your local git-ignored profile.yaml from profile.example.yaml",
+    )
+    p_init.add_argument("--force", action="store_true", help="Overwrite existing profile.yaml with template")
+    p_init.add_argument("--name", help="Student name")
+    p_init.add_argument("--citizenship", help="Citizenship status (e.g. 'US Citizen', 'International')")
+    p_init.add_argument("--state", help="Current state or province (e.g. 'California', 'Washington')")
+    p_init.add_argument("--country", help="Current country (e.g. 'United States', 'Canada')")
+    p_init.add_argument("--degree", help="Target degree (e.g. \"Master's\", 'PhD', 'MBA')")
+    p_init.add_argument("--field", help="Field of study (e.g. 'Computer Science', 'Bioengineering')")
+    p_init.add_argument("--gpa", type=float, help="Current GPA (e.g. 3.85)")
+    p_init.add_argument("--min-award", type=int, help="Minimum award filter in USD (e.g. 5000)")
+
     sub.add_parser(
         "match",
         help="Score scholarships using profile.yaml (geographies & filters) and export SQLite/CSV/Markdown dashboard",
@@ -262,6 +326,7 @@ def main() -> None:
     parser = build_parser()
     args = parser.parse_args()
     dispatch = {
+        "init": cmd_init,
         "match": cmd_match,
         "search": cmd_search,
         "scrape": cmd_scrape,
