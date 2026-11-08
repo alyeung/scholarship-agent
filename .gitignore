@@ -1,0 +1,39 @@
+# ============================================================================
+# Security & Privacy Git Ignore Rules
+# Ensures no personal profile data, generated essays/dashboards, or API keys
+# are ever committed to version control.
+# ============================================================================
+
+# 1. Secrets, API Keys & Credentials (strictly ignored)
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*credentials*.json
+*secret*
+
+# 2. Personal Student Profile (only profile.example.yaml is tracked)
+profile.yaml
+profile.local.yaml
+*.profile.yaml
+
+# 3. Generated Personal Data, Dashboards, Databases & Essays
+data/*
+!data/.gitkeep
+
+# 4. Virtual environment & Python / Test caches
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+*.egg-info/
+dist/
+build/
+
+# 5. OS & Editor metadata
+.DS_Store
+.idea/
+.vscode/

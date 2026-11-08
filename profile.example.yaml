@@ -1,0 +1,133 @@
+# ============================================================================
+# Graduate School Scholarship Finder - Student Profile & Filter Configuration
+# ============================================================================
+# Copy this file to `profile.yaml` (`cp profile.example.yaml profile.yaml`)
+# and customize your personal academic, geographic, demographic, and filter
+# preferences. `profile.yaml` is git-ignored so your personal details remain
+# private locally.
+
+student:
+  name: "Alex Rivera"
+  citizenship_status: "US Citizen" # "US Citizen", "Permanent Resident", "International", "DACA", "Dual Citizen"
+  citizenship_countries:
+    - "United States"
+  first_generation_college: false
+  veteran_or_military_affiliated: false
+  disability_status: false
+  underrepresented_backgrounds: [] # e.g., ["Women in STEM", "First-Gen", "Veterans", "LGBTQ+", "Hispanic/Latino", "Black/African American", "Indigenous"]
+  languages:
+    - "English"
+
+geographies:
+  # Where you currently live / hold residency (used for state, regional, & local foundation awards)
+  current_country: "United States"
+  current_state_or_province: "Washington"
+  current_city_or_metro: "Seattle"
+  current_region: "Pacific Northwest"
+
+  # Where you plan to attend graduate school
+  study_destination_countries:
+    - "United States"
+    - "United Kingdom"
+    - "Canada"
+  study_destination_states_or_regions:
+    - "Washington"
+    - "California"
+    - "Massachusetts"
+    - "Pennsylvania"
+    - "New York"
+    - "Any US State"
+
+  # Geographic scope toggles
+  include_national_scholarships: true
+  include_state_and_regional_scholarships: true
+  include_international_fellowships: true
+  excluded_countries: []
+
+academics:
+  target_degree: "Master's" # e.g., "Master's", "PhD", "MBA", "JD", "MD", "MPH"
+  also_consider_degrees:
+    - "Master's"
+    - "PhD"
+  field_of_study: "Computer Science & Artificial Intelligence"
+  discipline_category: "STEM" # "STEM", "Business", "Healthcare", "Humanities", "Social Sciences", "Law", "Policy", "Arts"
+  current_academic_level: "Incoming Graduate Student (Fall 2027)" # e.g., "Senior Undergrad", "Incoming Graduate Student", "1st Year Grad", "2nd Year Grad"
+  gpa: 3.85
+  gpa_scale: 4.0
+  undergrad_major: "Computer Science"
+  target_universities:
+    - "University of Washington"
+    - "Stanford University"
+    - "UC Berkeley"
+    - "Carnegie Mellon University"
+  test_scores:
+    gre_quant: 168
+    gre_verbal: 162
+
+filters:
+  # Hard & soft filters applied automatically during discovery and eligibility matching
+  min_award_amount_usd: 2500
+  allowed_degree_levels:
+    - "Master's"
+    - "PhD"
+    - "Graduate"
+  allowed_award_types:
+    - "Fellowship"
+    - "Scholarship"
+    - "Grant"
+    - "Tuition Waiver"
+    - "Stipend"
+
+  # Strict exclusion toggles
+  exclude_repayable_loans: true
+  exclude_service_or_employment_bonds: false # Set true to exclude awards requiring post-grad employment (e.g., DoD SMART)
+  exclude_institution_locked_unless_target: true # Exclude university-specific awards unless in `target_universities`
+  require_no_application_fee: true
+  only_show_eligible_or_likely: false # Set true to hide "Ineligible" awards from the dashboard export
+  min_fit_score_threshold: 40 # Minimum 0-100 fit score to keep in recommended results
+
+  # Deadline window filter (YYYY-MM-DD)
+  deadline_after: "2026-11-01"
+  deadline_before: "2027-12-31"
+  max_recommendation_letters: 4
+
+  # Keyword targeting & negative filters
+  must_match_any_keywords: [] # If non-empty, scholarship must match at least one of these terms
+  boost_keywords:
+    - "artificial intelligence"
+    - "machine learning"
+    - "computer science"
+    - "STEM"
+    - "graduate fellowship"
+    - "engineering"
+    - "Washington"
+    - "Pacific Northwest"
+  exclude_keywords:
+    - "undergraduate only"
+    - "high school seniors"
+    - "repayable loan"
+    - "nursing only"
+
+research_and_career:
+  research_interests:
+    - "Autonomous AI Agents & Harness Engineering"
+    - "Machine Learning Systems"
+    - "Natural Language Processing"
+    - "Responsible & Safe AI"
+  career_goals: >-
+    Build reliable, safety-critical AI agent systems and contribute to open-source
+    developer tooling and research in graduate school before pursuing applied AI
+    research in industry or academia.
+  publications_or_projects:
+    - title: "Multi-Agent Scholarship Discovery System"
+      summary: "Designed an ADK-based multi-agent workflow with deterministic guardrails and fit scoring."
+    - title: "Undergraduate Capstone in Distributed ML"
+      summary: "Optimized inference latency by 35% across multi-node clusters."
+  leadership_and_service:
+    - role: "Peer Mentor, Undergraduate CS Society"
+      summary: "Mentored 25+ underclassmen in systems programming and research applications."
+    - role: "Volunteer Coding Instructor"
+      summary: "Taught weekend Python workshops for local high school students."
+
+financial_and_preferences:
+  demonstrated_financial_need: true
